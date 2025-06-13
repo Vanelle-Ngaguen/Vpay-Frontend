@@ -1,41 +1,35 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { useFonts } from "expo-font";
+import { Stack, useRouter } from "expo-router";
+import * as React from "react";
+import { useColorScheme } from "react-native";
+import "react-native-reanimated";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const App = () => {
+	const router = useRouter();
+	// const segments = useSegments();
+	const colorScheme = useColorScheme();
+	const [loaded] = useFonts({
+		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+	});
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+	if (!loaded) {
+		// Async font loading only occurs in development.
+		return null;
+	}
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+	// Redirect to onboarding if the user is at the root or an invalid route
+	// useEffect(() => {
+	// 	if (segments.length === 0 || segments[0] === "") {
+	// 		router.replace("/(app)/onboarding");
+	// 	}
+	// }, [segments]);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        
-        <Stack.Screen name="index" 
-        options={{
-          headerTitle: "Vpay",
-        }}/>
-        <Stack.Screen name="unboarding"
-        options={{
-          headerTitle: "Unboarding",
-        }}/>
-        <Stack.Screen name="signup" 
-        options={{
-          headerTitle: "SignUp"
-        }}/>
-        
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
-}
+	return (
+		<Stack screenOptions={{ headerShown: false }}>
+			<Stack.Screen name="(app)" />
+			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+			<Stack.Screen name="+not-found" />
+		</Stack>
+	);
+};
+export default App;
