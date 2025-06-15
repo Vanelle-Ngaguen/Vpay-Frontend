@@ -41,6 +41,12 @@
 					"microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
 					"recordAudioAndroid": true
 				}
+			],
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "The app accesses you photos to let you verify you KYC information"
+				}
 			]
 		],
 		"experiments": {
