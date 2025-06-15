@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	View,
 	Text,
@@ -9,15 +9,11 @@ import {
 import { Link, router } from "expo-router";
 
 const OnboardingLogin = () => {
+	const [fullName, setFullName] = useState("");
+	const [username, setUsername] = useState("");
+
 	return (
 		<View style={styles.container}>
-			{/* Header Section */}
-			{/* <View style={styles.header}> */}
-			{/* 	<TouchableOpacity style={styles.backButton}> */}
-			{/* 		<Text style={styles.backButtonText}>←</Text> */}
-			{/* 	</TouchableOpacity> */}
-			{/* </View> */}
-
 			{/* Paragraph Section */}
 			<View style={styles.section}>
 				<Text style={styles.paragraph}>
@@ -33,6 +29,7 @@ const OnboardingLogin = () => {
 						style={styles.input}
 						placeholder="Full Name"
 						placeholderTextColor="#888"
+						onChangeText={setFullName}
 					/>
 				</View>
 				<View style={styles.inputContainer}>
@@ -41,6 +38,7 @@ const OnboardingLogin = () => {
 						style={styles.input}
 						placeholder="Username"
 						placeholderTextColor="#888"
+						onChangeText={setUsername}
 					/>
 				</View>
 			</View>
@@ -48,8 +46,14 @@ const OnboardingLogin = () => {
 			{/* Continue Button Section */}
 			<View>
 				<TouchableOpacity
-					onPress={() => router.push("/(auth)/signup")}
+					onPress={() =>
+						router.push({
+							pathname: "/(auth)/signup",
+							params: { name: fullName, username },
+						})
+					}
 					style={styles.continueButton}
+					disabled={fullName.length < 1 || username.length < 1}
 				>
 					<Text style={styles.continueButtonText}>Continue</Text>
 				</TouchableOpacity>
@@ -128,6 +132,9 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		alignItems: "center", // Center text horizontally
 		justifyContent: "center", // Center text vertically
+	},
+	disabledButton: {
+		color: "#aaa",
 	},
 	continueButtonText: {
 		fontSize: 16,

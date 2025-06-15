@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
+export const options = {
+	title: "KYC Verification",
+};
+
 const KYCVerification = () => {
 	const [idUploaded, setIdUploaded] = useState(false);
 	const [faceCaptured, setFaceCaptured] = useState(false);

@@ -10,6 +10,10 @@ import {
 import { Link } from "expo-router";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
+export const options = {
+	title: "Login",
+};
+
 const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
 

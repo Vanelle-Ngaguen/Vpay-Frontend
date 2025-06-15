@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -8,15 +8,22 @@ import {
 	StyleSheet,
 } from "react-native";
 import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const SignUp = () => {
+	const { name, username } = useLocalSearchParams();
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 	const togglePasswordVisibility = () => setShowPassword(!showPassword);
 	const toggleConfirmPasswordVisibility = () =>
 		setShowConfirmPassword(!showConfirmPassword);
+
+	useEffect(() => {
+		if (!name || !username) {
+			router.navigate("/(onboarding)/onlogin");
+		}
+	}, [name, username]);
 
 	return (
 		<View style={styles.container}>
@@ -27,6 +34,12 @@ const SignUp = () => {
 					style={styles.logo}
 					resizeMode="contain"
 				/>
+				<Text>
+					Hello,{" "}
+					<Text style={{ textTransform: "capitalize", fontWeight: "bold" }}>
+						{name}
+					</Text>
+				</Text>
 			</View>
 
 			{/* Input Fields */}

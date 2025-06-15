@@ -26,7 +26,11 @@ const App = () => {
 
 	return (
 		<SafeAreaProvider>
-			<Stack screenOptions={{ headerShown: false }}>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+				}}
+			>
 				<Stack.Screen name="(onboarding)" />
 				<Stack.Screen name="(app)" />
 				<Stack.Screen name="(auth)" options={{ headerShown: false }} />
