@@ -2,8 +2,8 @@ import { Stack } from "expo-router";
 
 const AppLayout = () => {
 	return (
-		<Stack screenOptions={{ headerShown: false }}>
-			<Stack.Screen name="onboarding" />
+		<Stack screenOptions={{ headerShown: true }}>
+			<Stack.Screen name="index" />
 		</Stack>
 	);
 };

@@ -1,103 +1,138 @@
-import React, { useState } from "react";
-import emailverficon from "../../assets/images/emailverf.jpg"; // Adjust the path as necessary
+import { router } from "expo-router";
+import React, { useRef, useState } from "react";
+import {
+	View,
+	Text,
+	TextInput,
+	Image,
+	TouchableOpacity,
+	StyleSheet,
+} from "react-native";
 
 const EmailVerification = () => {
 	const [code, setCode] = useState(new Array(5).fill(""));
+	const inputRefs = useRef<Array<TextInput>>([]);
 
-	const handleChange = (value, index) => {
-		if (isNaN(value)) return;
+	const handleChange = (value: any, index: number) => {
+		if (!/^\d?$/.test(value)) return; // Accept only digits or empty
+
 		const newCode = [...code];
 		newCode[index] = value;
 		setCode(newCode);
 
-		// Move to the next input box
+		// Move focus
 		if (value && index < 4) {
-			document.getElementById(`code-input-${index + 1}`).focus();
+			inputRefs.current[index + 1]?.focus();
 		}
 	};
 
 	const handleVerify = () => {
 		alert(`Verification code entered: ${code.join("")}`);
-		window.location.href = "/login"; // Redirect to the login page
+		router.navigate("/(auth)/login"); // Replace with your Login screen route
+	};
+
+	const handleResend = () => {
+		alert("Verification code resent!");
+		// Trigger resend logic here
 	};
 
 	return (
-		<div style={{ textAlign: "center", padding: "20px" }}>
-			{/* Section 1: Logo */}
-			<div>
-				<img
-					src={emailverficon}
-					alt="Logo"
-					style={{ width: "100px", marginBottom: "20px" }}
-				/>
-			</div>
+		<View style={styles.container}>
+			{/* Logo/Image */}
+			<Image
+				source={require("../../assets/images/emailverf.jpg")}
+				style={styles.logo}
+				resizeMode="contain"
+			/>
 
-			{/* Section 2: Email Sent Message */}
-			<div>
-				<p>
-					An email has been sent to your email address. Please enter the code
-					below to verify your email.
-				</p>
-			</div>
+			{/* Message */}
+			<Text style={styles.message}>
+				An email has been sent to your email address. Please enter the code
+				below to verify your email.
+			</Text>
 
-			{/* Section 3: Input Boxes */}
-			<div
-				style={{
-					display: "flex",
-					justifyContent: "center",
-					gap: "10px",
-					margin: "20px 0",
-				}}
-			>
+			{/* Code Inputs */}
+			<View style={styles.inputRow}>
 				{code.map((digit, index) => (
-					<input
+					<TextInput
 						key={index}
-						id={`code-input-${index}`}
-						type="text"
-						maxLength="1"
+						ref={(ref) => (inputRefs.current[index] = ref as TextInput)}
 						value={digit}
-						onChange={(e) => handleChange(e.target.value, index)}
-						style={{
-							width: "40px",
-							height: "40px",
-							textAlign: "center",
-							fontSize: "18px",
-							border: "1px solid #ccc",
-							borderRadius: "5px",
-						}}
+						onChangeText={(value) => handleChange(value, index)}
+						maxLength={1}
+						keyboardType="number-pad"
+						style={styles.inputBox}
 					/>
 				))}
-			</div>
+			</View>
 
-			{/* Section 4: Didn't Receive Code */}
-			<div>
-				<p>
-					Didn't receive the code?{" "}
-					<a href="/resend-code" style={{ color: "rgba(88, 0, 151, 1)" }}>
-						Resend Code
-					</a>
-				</p>
-			</div>
+			{/* Resend Link */}
+			<Text style={styles.resendText}>
+				Didn't receive the code?{" "}
+				<Text style={styles.resendLink} onPress={handleResend}>
+					Resend Code
+				</Text>
+			</Text>
 
-			{/* Section 5: Verify Button */}
-			<div>
-				<button
-					onClick={handleVerify}
-					style={{
-						padding: "10px 20px",
-						fontSize: "16px",
-						backgroundColor: "rgba(88, 0, 151, 1)",
-						color: "#fff",
-						border: "none",
-						borderRadius: "5px",
-						cursor: "pointer",
-					}}
-				>
-					Verify
-				</button>
-			</div>
-		</div>
+			{/* Verify Button */}
+			<TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
+				<Text style={styles.verifyText}>Verify</Text>
+			</TouchableOpacity>
+		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		padding: 20,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	logo: {
+		width: 100,
+		height: 100,
+		marginBottom: 20,
+	},
+	message: {
+		textAlign: "center",
+		fontSize: 16,
+		marginBottom: 20,
+	},
+	inputRow: {
+		flexDirection: "row",
+		justifyContent: "center",
+		marginBottom: 20,
+		gap: 10,
+	},
+	inputBox: {
+		width: 50,
+		height: 50,
+		borderWidth: 1,
+		borderColor: "#ccc",
+		borderRadius: 8,
+		textAlign: "center",
+		fontSize: 20,
+	},
+	resendText: {
+		marginBottom: 20,
+		textAlign: "center",
+	},
+	resendLink: {
+		color: "#580097",
+		fontWeight: "bold",
+	},
+	verifyButton: {
+		backgroundColor: "#580097",
+		paddingVertical: 12,
+		paddingHorizontal: 30,
+		borderRadius: 5,
+	},
+	verifyText: {
+		color: "#fff",
+		fontSize: 16,
+		fontWeight: "bold",
+	},
+});
 
 export default EmailVerification;

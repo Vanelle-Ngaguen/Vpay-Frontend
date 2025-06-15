@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
-	FaApple,
-	FaEnvelope,
-	FaEye,
-	FaEyeSlash,
-	FaLock,
-	FaPhone,
-} from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import vpaylogo from "../../assets/images/vpaylogo.png"; // Adjust the path as necessary
+	View,
+	Text,
+	TextInput,
+	Image,
+	TouchableOpacity,
+	StyleSheet,
+} from "react-native";
+import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const SignUp = () => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -19,195 +19,202 @@ const SignUp = () => {
 		setShowConfirmPassword(!showConfirmPassword);
 
 	return (
-		<div
-			style={{
-				maxWidth: "400px",
-				margin: "0 auto",
-				padding: "20px",
-				textAlign: "center",
-			}}
-		>
-			{/* Section 1: Logo */}
-			<div style={{ marginBottom: "20px" }}>
-				<img src={vpaylogo} style={{ width: "150px" }} />
-			</div>
+		<View style={styles.container}>
+			{/* Logo Section */}
+			<View style={styles.logoContainer}>
+				<Image
+					source={require("../../assets/images/vpaylogo.png")}
+					style={styles.logo}
+					resizeMode="contain"
+				/>
+			</View>
 
-			{/* Section 2: Input Fields */}
-			<div style={{ marginBottom: "20px" }}>
-				<div style={{ position: "relative", marginBottom: "10px" }}>
-					<FaPhone
-						style={{
-							position: "absolute",
-							top: "50%",
-							left: "10px",
-							transform: "translateY(-50%)",
-							color: "rgba(88, 0, 151, 1)",
-						}}
-					/>
-					<input
-						type="text"
-						placeholder="Phone Number"
-						style={{
-							width: "100%",
-							padding: "10px 10px 10px 40px",
-							boxSizing: "border-box",
-						}}
-					/>
-				</div>
-				<div style={{ position: "relative", marginBottom: "10px" }}>
-					<FaEnvelope
-						style={{
-							position: "absolute",
-							top: "50%",
-							left: "10px",
-							transform: "translateY(-50%)",
-							color: "rgba(88, 0, 151, 1)",
-						}}
-					/>
-					<input
-						type="email"
+			{/* Input Fields */}
+			<View style={styles.inputContainer}>
+				<View style={styles.inputWrapper}>
+					<FontAwesome name="phone" style={styles.icon} />
+					<TextInput placeholder="Phone Number" style={styles.input} />
+				</View>
+
+				<View style={styles.inputWrapper}>
+					<FontAwesome name="envelope" style={styles.icon} />
+					<TextInput
 						placeholder="Email"
-						style={{
-							width: "100%",
-							padding: "10px 10px 10px 40px",
-							boxSizing: "border-box",
-						}}
+						keyboardType="email-address"
+						style={styles.input}
 					/>
-				</div>
-				<div style={{ position: "relative", marginBottom: "10px" }}>
-					<FaLock
-						style={{
-							position: "absolute",
-							top: "50%",
-							left: "10px",
-							transform: "translateY(-50%)",
-							color: "rgba(88, 0, 151, 1)",
-						}}
-					/>
-					<input
-						type={showPassword ? "text" : "password"}
+				</View>
+
+				<View style={styles.inputWrapper}>
+					<FontAwesome name="lock" style={styles.icon} />
+					<TextInput
 						placeholder="Password"
-						style={{
-							width: "100%",
-							padding: "10px 10px 10px 40px",
-							boxSizing: "border-box",
-						}}
+						secureTextEntry={!showPassword}
+						style={styles.input}
 					/>
-					<span
-						onClick={togglePasswordVisibility}
-						style={{
-							position: "absolute",
-							top: "50%",
-							right: "10px",
-							transform: "translateY(-50%)",
-							cursor: "pointer",
-							color: "rgba(88, 0, 151, 1)",
-						}}
+					<TouchableOpacity
+						onPress={togglePasswordVisibility}
+						style={styles.eyeIcon}
 					>
-						{showPassword ? <FaEyeSlash /> : <FaEye />}
-					</span>
-				</div>
-				<div style={{ position: "relative", marginBottom: "10px" }}>
-					<FaLock
-						style={{
-							position: "absolute",
-							top: "50%",
-							left: "10px",
-							transform: "translateY(-50%)",
-							color: "rgba(88, 0, 151, 1)",
-						}}
-					/>
-					<input
-						type={showConfirmPassword ? "text" : "password"}
+						<FontAwesome5
+							name={showPassword ? "eye-slash" : "eye"}
+							size={20}
+							color="#580097"
+						/>
+					</TouchableOpacity>
+				</View>
+
+				<View style={styles.inputWrapper}>
+					<FontAwesome name="lock" style={styles.icon} />
+					<TextInput
 						placeholder="Confirm Password"
-						style={{
-							width: "100%",
-							padding: "10px 10px 10px 40px",
-							boxSizing: "border-box",
-						}}
+						secureTextEntry={!showConfirmPassword}
+						style={styles.input}
 					/>
-					<span
-						onClick={toggleConfirmPasswordVisibility}
-						style={{
-							position: "absolute",
-							top: "50%",
-							right: "10px",
-							transform: "translateY(-50%)",
-							cursor: "pointer",
-							color: "rgba(88, 0, 151, 1)",
-						}}
+					<TouchableOpacity
+						onPress={toggleConfirmPasswordVisibility}
+						style={styles.eyeIcon}
 					>
-						{showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-					</span>
-				</div>
-			</div>
+						<FontAwesome5
+							name={showConfirmPassword ? "eye-slash" : "eye"}
+							size={20}
+							color="#580097"
+						/>
+					</TouchableOpacity>
+				</View>
+			</View>
 
-			{/* Section 3: Create Account Button */}
-			<div style={{ marginBottom: "20px" }}>
-				<button
-					onClick={() => (window.location.href = "/emailverification")}
-					style={{
-						padding: "10px 20px",
-						width: "100%",
-						backgroundColor: "rgba(88, 0, 151, 1)",
-						color: "#fff",
-						border: "none",
-						borderRadius: "5px",
-					}}
+			{/* Sign Up Button */}
+			<TouchableOpacity
+				style={styles.button}
+				onPress={() => router.navigate("/(auth)/email-verification")} // Replace with your screen name
+			>
+				<Text style={styles.buttonText}>Create an Account</Text>
+			</TouchableOpacity>
+
+			{/* Already have account */}
+			<Text style={styles.loginText}>
+				Already have an account?{" "}
+				<Text
+					style={styles.loginLink}
+					onPress={() => router.navigate("/(auth)/login")} // Replace with your login screen
 				>
-					Create an Account
-				</button>
-			</div>
+					Log in
+				</Text>
+			</Text>
 
-			{/* Section 4: Already Have an Account */}
-			<div style={{ marginBottom: "20px" }}>
-				<p>
-					Do you have an account already?{" "}
-					<a href="/login" style={{ color: "rgba(88, 0, 151, 1)" }}>
-						Log in
-					</a>
-				</p>
-			</div>
+			{/* Or login with */}
+			<View style={styles.orDivider}>
+				<View style={styles.line} />
+				<Text style={styles.orText}>Or log in with</Text>
+				<View style={styles.line} />
+			</View>
 
-			{/* Section 5: Login with Google or Apple */}
-			<div>
-				<hr />
-				<p>Or log in with</p>
-				<div style={{ marginBottom: "10px" }}>
-					<button
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							width: "100%",
-							padding: "10px",
-							border: "1px solid #ccc",
-							borderRadius: "5px",
-							backgroundColor: "#fff",
-						}}
-					>
-						<FcGoogle style={{ marginRight: "10px" }} /> Google
-					</button>
-				</div>
-				<div>
-					<button
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							width: "100%",
-							padding: "10px",
-							border: "1px solid #ccc",
-							borderRadius: "5px",
-							backgroundColor: "#fff",
-						}}
-					>
-						<FaApple style={{ marginRight: "10px" }} /> Apple
-					</button>
-				</div>
-			</div>
-		</div>
+			<TouchableOpacity style={styles.socialButton}>
+				<FontAwesome5
+					name="google"
+					size={20}
+					color="#DB4437"
+					style={{ marginRight: 10 }}
+				/>
+				<Text>Google</Text>
+			</TouchableOpacity>
+
+			<TouchableOpacity style={styles.socialButton}>
+				<FontAwesome
+					name="apple"
+					size={20}
+					color="#000"
+					style={{ marginRight: 10 }}
+				/>
+				<Text>Apple</Text>
+			</TouchableOpacity>
+		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		padding: 20,
+		justifyContent: "center",
+	},
+	logoContainer: {
+		alignItems: "center",
+		marginBottom: 20,
+	},
+	logo: {
+		width: 150,
+		height: 80,
+	},
+	inputContainer: {
+		marginBottom: 20,
+	},
+	inputWrapper: {
+		flexDirection: "row",
+		alignItems: "center",
+		borderWidth: 1,
+		borderColor: "#ccc",
+		borderRadius: 5,
+		marginBottom: 10,
+		paddingHorizontal: 10,
+	},
+	icon: {
+		color: "#580097",
+		fontSize: 18,
+		marginRight: 10,
+	},
+	input: {
+		flex: 1,
+		paddingVertical: 10,
+	},
+	eyeIcon: {
+		marginLeft: 5,
+	},
+	button: {
+		backgroundColor: "#580097",
+		paddingVertical: 12,
+		borderRadius: 5,
+		alignItems: "center",
+		marginBottom: 20,
+	},
+	buttonText: {
+		color: "#fff",
+		fontSize: 16,
+		fontWeight: "bold",
+	},
+	loginText: {
+		textAlign: "center",
+		marginBottom: 20,
+	},
+	loginLink: {
+		color: "#580097",
+		textDecorationLine: "underline",
+	},
+	orDivider: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginVertical: 10,
+	},
+	line: {
+		flex: 1,
+		height: 1,
+		backgroundColor: "#ccc",
+	},
+	orText: {
+		marginHorizontal: 10,
+		color: "#999",
+	},
+	socialButton: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingVertical: 12,
+		borderWidth: 1,
+		borderColor: "#ccc",
+		borderRadius: 5,
+		marginBottom: 10,
+	},
+});
 
 export default SignUp;

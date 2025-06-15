@@ -6,25 +6,17 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { Link, router } from "expo-router";
 
 const OnboardingLogin = () => {
-	const router = useRouter();
-
-	const navigateToSignup = () => {
-		// Replace 'Signup' with the actual name of your Signup screen in your navigator
-		router.push("/(auth)/signup");
-	};
-
 	return (
 		<View style={styles.container}>
 			{/* Header Section */}
-			<View style={styles.header}>
-				<TouchableOpacity style={styles.backButton}>
-					<Text style={styles.backButtonText}>←</Text>
-				</TouchableOpacity>
-				<Text style={styles.headerTitle}>Unboarding</Text>
-			</View>
+			{/* <View style={styles.header}> */}
+			{/* 	<TouchableOpacity style={styles.backButton}> */}
+			{/* 		<Text style={styles.backButtonText}>←</Text> */}
+			{/* 	</TouchableOpacity> */}
+			{/* </View> */}
 
 			{/* Paragraph Section */}
 			<View style={styles.section}>
@@ -56,11 +48,23 @@ const OnboardingLogin = () => {
 			{/* Continue Button Section */}
 			<View>
 				<TouchableOpacity
-					onPress={navigateToSignup}
+					onPress={() => router.push("/(auth)/signup")}
 					style={styles.continueButton}
 				>
 					<Text style={styles.continueButtonText}>Continue</Text>
 				</TouchableOpacity>
+
+				<Link
+					href="/(auth)/login"
+					style={{
+						textAlign: "center",
+						marginBlockStart: 10,
+						textDecorationLine: "underline",
+						color: "#580097",
+					}}
+				>
+					I already have an account
+				</Link>
 			</View>
 		</View>
 	);
@@ -69,6 +73,7 @@ const OnboardingLogin = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		justifyContent: "center",
 		padding: 20,
 		backgroundColor: "#fff", // Typically, you'd set a background color for the screen
 	},
@@ -94,6 +99,7 @@ const styles = StyleSheet.create({
 	paragraph: {
 		fontSize: 16,
 		color: "#555",
+		textAlign: "center",
 	},
 	inputContainer: {
 		marginBottom: 10,

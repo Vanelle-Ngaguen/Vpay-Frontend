@@ -5,7 +5,7 @@ const Onboarding = () => {
 	return (
 		<View style={styles.container}>
 			<Image
-				source={require("../../../assets/images/unboard_img.png")} // Reusing the imported local asset
+				source={require("../../assets/images/unboard_img.png")} // Reusing the imported local asset
 				style={styles.unboardImage}
 			/>
 			<Text style={styles.text}>Your Virtual Gateway</Text>
@@ -13,7 +13,7 @@ const Onboarding = () => {
 				Create virtual cards, manage transactions, and enhance your security
 				with ease.
 			</Text>
-			<Link href="/(auth)/login" style={styles.buttonContainer}>
+			<Link href="/(onboarding)/onlogin" style={styles.buttonContainer}>
 				<Text style={styles.buttonText}>Get Started</Text>
 			</Link>
 		</View>

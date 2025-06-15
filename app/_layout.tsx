@@ -1,11 +1,11 @@
 import { useFonts } from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import * as React from "react";
 import { useColorScheme } from "react-native";
 import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const App = () => {
-	const router = useRouter();
 	// const segments = useSegments();
 	const colorScheme = useColorScheme();
 	const [loaded] = useFonts({
@@ -25,11 +25,14 @@ const App = () => {
 	// }, [segments]);
 
 	return (
-		<Stack screenOptions={{ headerShown: false }}>
-			<Stack.Screen name="(app)" />
-			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
-			<Stack.Screen name="+not-found" />
-		</Stack>
+		<SafeAreaProvider>
+			<Stack screenOptions={{ headerShown: false }}>
+				<Stack.Screen name="(onboarding)" />
+				<Stack.Screen name="(app)" />
+				<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+				<Stack.Screen name="+not-found" />
+			</Stack>
+		</SafeAreaProvider>
 	);
 };
 export default App;
