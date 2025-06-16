@@ -1,5 +1,5 @@
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import {
 	Image,
@@ -9,15 +9,39 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import storage from "@react-native-async-storage/async-storage";
 
 export const options = {
 	title: "Login",
 };
 
 const Login = () => {
+	const [email, setEmail] = useState<string>();
+	const [password, setPassword] = useState<string>();
+
 	const [showPassword, setShowPassword] = useState(false);
 
 	const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+	const handleLogin = () => {
+		fetch("http://192.168.100.117:8000/api/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			},
+			body: JSON.stringify({ email, password }),
+		})
+			.then((response) => response.json())
+			.then((data: { token: string }) => {
+				console.log("saving acess token", data);
+				storage.setItem("access_token", data.token).then(() => {
+					console.log("redirecting");
+					router.navigate("/(app)");
+				});
+			})
+			.catch(console.log);
+	};
 
 	return (
 		<View style={styles.container}>
@@ -46,6 +70,7 @@ const Login = () => {
 						placeholder="Email"
 						keyboardType="email-address"
 						autoCapitalize="none"
+						onChangeText={setEmail}
 					/>
 				</View>
 				<View style={styles.inputContainer}>
@@ -59,6 +84,7 @@ const Login = () => {
 						style={styles.input}
 						placeholder="Password"
 						secureTextEntry={!showPassword}
+						onChangeText={setPassword}
 					/>
 					<TouchableOpacity
 						onPress={togglePasswordVisibility}
@@ -82,15 +108,12 @@ const Login = () => {
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
 				</Link>
 			</View>
-			
 
 			{/* Section 3: Login Button */}
 			<View style={styles.section}>
-				<Link href="/(auth)/kyc-verification" asChild>
-					<TouchableOpacity style={styles.button}>
-						<Text style={styles.buttonText}>Login</Text>
-					</TouchableOpacity>
-				</Link>
+				<TouchableOpacity style={styles.button} onPress={handleLogin}>
+					<Text style={styles.buttonText}>Login</Text>
+				</TouchableOpacity>
 				<Text style={{ ...styles.subtext, marginBlockStart: 2 }}>
 					Do not yet have an account?{" "}
 					<Link href="/(auth)/signup" style={styles.linkText}>

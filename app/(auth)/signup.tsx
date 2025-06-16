@@ -9,9 +9,14 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import storage from "@react-native-async-storage/async-storage";
 
 const SignUp = () => {
 	const { name, username } = useLocalSearchParams();
+	const [phone, setPhone] = useState<string>();
+	const [password, setPassword] = useState<string>();
+	const [password_confirmation, setPasswordConfirmation] = useState<string>();
+	const [email, setEmail] = useState<string>();
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -24,6 +29,42 @@ const SignUp = () => {
 			router.navigate("/(onboarding)/onlogin");
 		}
 	}, [name, username]);
+
+	const handleSignup = () => {
+		const data = {
+			name,
+			username,
+			phone,
+			password,
+			email,
+			password_confirmation,
+		};
+		console.log("doing something");
+		fetch("http://192.168.100.117:8000/api/signup", {
+			method: "post",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			},
+		})
+			.then((response) => response.json())
+			.then((data: { token: string }) => {
+				storage.setItem("access_token", data.token).then(() => {
+					router.navigate("/(auth)/email-verification");
+				});
+			})
+			.catch(console.log);
+
+		// const reponse = axios
+		// 	.post("http://192.168.100.117:8000/api/signup", data)
+		// 	.then((response) => {
+		// 		console.log("done with the request", response.data);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log("failed to process request", error.data.errors);
+		// 	});
+	};
 
 	return (
 		<View style={styles.container}>
@@ -46,7 +87,11 @@ const SignUp = () => {
 			<View style={styles.inputContainer}>
 				<View style={styles.inputWrapper}>
 					<FontAwesome name="phone" style={styles.icon} />
-					<TextInput placeholder="Phone Number" style={styles.input} />
+					<TextInput
+						placeholder="Phone Number"
+						style={styles.input}
+						onChangeText={setPhone}
+					/>
 				</View>
 
 				<View style={styles.inputWrapper}>
@@ -55,6 +100,7 @@ const SignUp = () => {
 						placeholder="Email"
 						keyboardType="email-address"
 						style={styles.input}
+						onChangeText={setEmail}
 					/>
 				</View>
 
@@ -64,6 +110,7 @@ const SignUp = () => {
 						placeholder="Password"
 						secureTextEntry={!showPassword}
 						style={styles.input}
+						onChangeText={setPassword}
 					/>
 					<TouchableOpacity
 						onPress={togglePasswordVisibility}
@@ -83,6 +130,7 @@ const SignUp = () => {
 						placeholder="Confirm Password"
 						secureTextEntry={!showConfirmPassword}
 						style={styles.input}
+						onChangeText={setPasswordConfirmation}
 					/>
 					<TouchableOpacity
 						onPress={toggleConfirmPasswordVisibility}
@@ -100,7 +148,7 @@ const SignUp = () => {
 			{/* Sign Up Button */}
 			<TouchableOpacity
 				style={styles.button}
-				onPress={() => router.navigate("/(auth)/email-verification")} // Replace with your screen name
+				onPress={handleSignup} // Replace with your screen name
 			>
 				<Text style={styles.buttonText}>Create an Account</Text>
 			</TouchableOpacity>
