@@ -1,12 +1,11 @@
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
-	Image,
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
+    Image,
+    StyleSheet,
+    Text,
+    TextInput,
+    View
 } from "react-native";
 
 const EmailVerification = () => {
@@ -44,11 +43,13 @@ const EmailVerification = () => {
 				style={styles.logo}
 				resizeMode="contain"
 			/>
-
+            {/* Heading */}
+            <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>
+                OTP
+            </Text>
 			{/* Message */}
 			<Text style={styles.message}>
-				An email has been sent to your email address. Please enter the code
-				below to verify your email.
+				Please enter the OTP verification code sent to you.
 			</Text>
 
 			{/* Code Inputs */}
@@ -77,9 +78,9 @@ const EmailVerification = () => {
 			</Text>
 
 			{/* Verify Button */}
-			<TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
+			{/* <TouchableOpacity style={styles.verifyButton} onPress={() => router.navigate("/(auth)/password-reset")}>
 				<Text style={styles.verifyText}>Verify</Text>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
 		</View>
 	);
 };

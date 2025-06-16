@@ -1,14 +1,14 @@
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-	View,
+	Image,
+	StyleSheet,
 	Text,
 	TextInput,
-	Image,
 	TouchableOpacity,
-	StyleSheet,
+	View,
 } from "react-native";
-import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
 
 const SignUp = () => {
 	const { name, username } = useLocalSearchParams();
@@ -145,6 +145,8 @@ const SignUp = () => {
 		</View>
 	);
 };
+
+// Removed duplicate export statement
 
 const styles = StyleSheet.create({
 	container: {

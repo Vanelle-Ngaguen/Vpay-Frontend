@@ -1,14 +1,14 @@
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import React, { useState } from "react";
 import {
-	View,
+	Image,
+	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
-	Image,
-	StyleSheet,
+	View,
 } from "react-native";
-import { Link } from "expo-router";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 export const options = {
 	title: "Login",
@@ -71,10 +71,18 @@ const Login = () => {
 						/>
 					</TouchableOpacity>
 				</View>
-				<Link href="/(auth)/kyc-verification">
+				<Link href="/(auth)/forgot-pwd" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>Forgot Password?</Text>
 				</Link>
+
+				<Link href="/(auth)/home" style={styles.linkText}>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>HOME?</Text>
+				</Link>
+				<Link href="/(auth)/card" style={styles.linkText}>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
+				</Link>
 			</View>
+			
 
 			{/* Section 3: Login Button */}
 			<View style={styles.section}>
