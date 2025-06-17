@@ -10,7 +10,7 @@ const AppLayout = () => {
 			}}
 		>
 			<Stack.Screen name="index" options={{ headerShown: false }} />
-			<Stack.Screen name="cards" />
+			<Stack.Screen name="card" />
 		</Stack>
 	);
 };

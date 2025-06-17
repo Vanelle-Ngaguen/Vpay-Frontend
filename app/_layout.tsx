@@ -1,9 +1,12 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as React from "react";
+import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import storage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 const App = () => {
 	// const segments = useSegments();
@@ -11,6 +14,14 @@ const App = () => {
 	const [loaded] = useFonts({
 		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
 	});
+
+	useEffect(() => {
+		storage.getItem("access_token").then((token) => {
+			if (!token) {
+				router.navigate("/(auth)/login");
+			}
+		});
+	}, []);
 
 	if (!loaded) {
 		// Async font loading only occurs in development.

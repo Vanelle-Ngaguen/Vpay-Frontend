@@ -1,4 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import React from "react";
 import {
 	ScrollView,
@@ -35,6 +36,12 @@ const HomePage = () => {
 				<View style={styles.action}>
 					<MaterialIcons name="remove-circle" size={40} color="red" />
 					<Text style={styles.actionText}>Withdraw</Text>
+				</View>
+				<View style={styles.action}>
+					<Link href="/(app)/card">
+						<MaterialIcons name="remove-circle" size={40} color="red" />
+						<Text style={styles.actionText}>My Cards</Text>
+					</Link>
 				</View>
 			</View>
 
