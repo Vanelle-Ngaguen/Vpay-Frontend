@@ -1,11 +1,11 @@
 {
 	"expo": {
-		"name": "MyPay",
-		"slug": "MyPay",
+		"name": "Virtual Pay",
+		"slug": "VPay",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
-		"scheme": "mypay",
+		"scheme": "vpay",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": true,
 		"ios": {
