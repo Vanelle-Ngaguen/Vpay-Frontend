@@ -10,6 +10,7 @@ import {
 	View,
 } from "react-native";
 import storage from "@react-native-async-storage/async-storage";
+import { Config } from "@/constants/Config";
 
 const SignUp = () => {
 	const { name, username } = useLocalSearchParams();
@@ -40,7 +41,7 @@ const SignUp = () => {
 			password_confirmation,
 		};
 		console.log("doing something");
-		fetch("http://192.168.100.117:8000/api/signup", {
+		fetch(`${Config.url.api}/signup`, {
 			method: "post",
 			body: JSON.stringify(data),
 			headers: {
@@ -55,15 +56,6 @@ const SignUp = () => {
 				});
 			})
 			.catch(console.log);
-
-		// const reponse = axios
-		// 	.post("http://192.168.100.117:8000/api/signup", data)
-		// 	.then((response) => {
-		// 		console.log("done with the request", response.data);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log("failed to process request", error.data.errors);
-		// 	});
 	};
 
 	return (

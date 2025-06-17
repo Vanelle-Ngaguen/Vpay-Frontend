@@ -10,10 +10,7 @@ import {
 	View,
 } from "react-native";
 import storage from "@react-native-async-storage/async-storage";
-
-export const options = {
-	title: "Login",
-};
+import { Config } from "@/constants/Config";
 
 const Login = () => {
 	const [email, setEmail] = useState<string>();
@@ -24,7 +21,7 @@ const Login = () => {
 	const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
 	const handleLogin = () => {
-		fetch("http://192.168.100.117:8000/api/login", {
+		fetch(`${Config.url.api}/login`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
