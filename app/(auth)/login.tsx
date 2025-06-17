@@ -99,7 +99,7 @@ const Login = () => {
 				<Link href="/(auth)/home" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>HOME?</Text>
 				</Link>
-				<Link href="/(auth)/card" style={styles.linkText}>
+				<Link href="/(app)/card" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
 				</Link>
 			</View>
