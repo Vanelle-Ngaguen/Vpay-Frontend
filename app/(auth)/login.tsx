@@ -1,4 +1,7 @@
+import { Config } from "@/constants/Config";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import storage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -9,9 +12,6 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import storage from "@react-native-async-storage/async-storage";
-import { Config } from "@/constants/Config";
-import axios from "axios";
 
 const Login = () => {
 	const [email, setEmail] = useState<string>();
@@ -25,28 +25,17 @@ const Login = () => {
 		axios
 			.post(`${Config.url.api}/login`, { email, password })
 			.then((response) => {
-<<<<<<< HEAD
 				storage
 					.setItem("access_token", response.data.token)
 					.then(() => {
 						console.log("redirecting");
 						router.navigate("/(app)");
 					})
-					.catch((reason) => {
-						// TODO: Handle Login errors
-						console.warn("Failed to signup ", reason);
-					});
-=======
-				storage.setItem("access_token", response.data.token).then(() => {
-					console.log("redirecting");
-					router.navigate("/(app)");
+				})
+				.catch((reason) => {
+					// TODO: Handle Login errors
+					console.warn("Failed to signup ", { ...reason });
 				});
-			})
-			.catch((reason) => {
-				// TODO: Handle Login errors
-				console.warn("Failed to signup ", reason);
->>>>>>> 5b9cf47d69c540a2536dd8133dbab01c108e73c3
-			});
 	};
 
 	return (

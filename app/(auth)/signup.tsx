@@ -1,4 +1,7 @@
+import { Config } from "@/constants/Config";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import storage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -9,9 +12,6 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import storage from "@react-native-async-storage/async-storage";
-import { Config } from "@/constants/Config";
-import axios from "axios";
 
 const SignUp = () => {
 	const { name, username } = useLocalSearchParams();
@@ -43,13 +43,13 @@ const SignUp = () => {
 		};
 
 		axios
-			.post(`${Config.url.api}/login`, data)
+			.post(`${Config.url.api}/signup`, data)
 			.then((response) => {
 				storage.setItem("access_token", response.data.token).then(() => {
 					router.navigate("/(auth)/email-verification");
 				});
 			})
-			.catch((reason) => console.warn("failed to login", reason));
+			.catch((reason) => console.warn("failed to signup", {...reason}));
 	};
 
 	return (
