@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import storage from "@react-native-async-storage/async-storage";
 import { Config } from "@/constants/Config";
+import axios from "axios";
 
 const Login = () => {
 	const [email, setEmail] = useState<string>();
@@ -21,23 +22,20 @@ const Login = () => {
 	const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
 	const handleLogin = () => {
-		fetch(`${Config.url.api}/login`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-			body: JSON.stringify({ email, password }),
-		})
-			.then((response) => response.json())
-			.then((data: { token: string }) => {
-				console.log("saving acess token", data);
-				storage.setItem("access_token", data.token).then(() => {
-					console.log("redirecting");
-					router.navigate("/(app)");
-				});
-			})
-			.catch(console.log);
+		axios
+			.post(`${Config.url.api}/login`, { email, password })
+			.then((response) => {
+				storage
+					.setItem("access_token", response.data.token)
+					.then(() => {
+						console.log("redirecting");
+						router.navigate("/(app)");
+					})
+					.catch((reason) => {
+						// TODO: Handle Login errors
+						console.warn("Failed to signup ", reason);
+					});
+			});
 	};
 
 	return (

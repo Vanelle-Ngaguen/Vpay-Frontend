@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import storage from "@react-native-async-storage/async-storage";
 import { Config } from "@/constants/Config";
+import axios from "axios";
 
 const SignUp = () => {
 	const { name, username } = useLocalSearchParams();
@@ -40,22 +41,15 @@ const SignUp = () => {
 			email,
 			password_confirmation,
 		};
-		console.log("doing something");
-		fetch(`${Config.url.api}/signup`, {
-			method: "post",
-			body: JSON.stringify(data),
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-		})
-			.then((response) => response.json())
-			.then((data: { token: string }) => {
-				storage.setItem("access_token", data.token).then(() => {
+
+		axios
+			.post(`${Config.url.api}/login`, data)
+			.then((response) => {
+				storage.setItem("access_token", response.data.token).then(() => {
 					router.navigate("/(auth)/email-verification");
 				});
 			})
-			.catch(console.log);
+			.catch((reason) => console.warn("failed to login", reason));
 	};
 
 	return (
