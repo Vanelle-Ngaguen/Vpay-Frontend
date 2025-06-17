@@ -25,6 +25,7 @@ const Login = () => {
 		axios
 			.post(`${Config.url.api}/login`, { email, password })
 			.then((response) => {
+<<<<<<< HEAD
 				storage
 					.setItem("access_token", response.data.token)
 					.then(() => {
@@ -35,6 +36,16 @@ const Login = () => {
 						// TODO: Handle Login errors
 						console.warn("Failed to signup ", reason);
 					});
+=======
+				storage.setItem("access_token", response.data.token).then(() => {
+					console.log("redirecting");
+					router.navigate("/(app)");
+				});
+			})
+			.catch((reason) => {
+				// TODO: Handle Login errors
+				console.warn("Failed to signup ", reason);
+>>>>>>> 5b9cf47d69c540a2536dd8133dbab01c108e73c3
 			});
 	};
 
