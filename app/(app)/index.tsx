@@ -54,6 +54,18 @@ const HomePage = () => {
 			</View>
 			<View style={styles.transactionItem}>
 				<Text>Transaction 2</Text>
+				<View style={{ marginLeft: 10 }}>
+					<Text>- XAF 10,000</Text>
+				</View>
+			</View>
+			<View style={styles.transactionItem}>
+				<Text>Transaction 3</Text>
+				<View style={{ marginLeft: 10 }}>
+					<Text>- XAF 10,000</Text>
+				</View>
+			</View>
+			<View style={styles.transactionItem}>
+				<Text>Transaction 2</Text>
 				<Text>- XAF 5,000</Text>
 			</View>
 		</ScrollView>

@@ -96,11 +96,14 @@ const Login = () => {
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>Forgot Password?</Text>
 				</Link>
 
-				<Link href="/(auth)/home" style={styles.linkText}>
+				<Link href="/(app)" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>HOME?</Text>
 				</Link>
 				<Link href="/(app)/card" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
+				</Link>
+				<Link href="/(app)/transaction" style={styles.linkText}>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>transaction?</Text>
 				</Link>
 			</View>
 
