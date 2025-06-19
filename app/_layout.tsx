@@ -32,7 +32,7 @@ const App = () => {
 				}}
 			>
 				<Stack.Screen name="(onboarding)" />
-				<Stack.Screen name="(app)" />
+				<Stack.Screen name="(tabs)" />
 				<Stack.Screen name="(auth)" options={{ headerShown: false }} />
 				<Stack.Screen name="+not-found" />
 			</Stack>

@@ -29,7 +29,7 @@ const Login = () => {
 					.setItem("access_token", response.data.token)
 					.then(() => {
 						console.log("redirecting");
-						router.navigate("/(app)");
+						router.push("/(tabs)");
 					})
 				})
 				.catch((reason) => {
@@ -95,16 +95,21 @@ const Login = () => {
 				<Link href="/(auth)/forgot-pwd" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>Forgot Password?</Text>
 				</Link>
-
-				<Link href="/(app)" style={styles.linkText}>
-					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>HOME?</Text>
+				<Link href="/(tabs)" style={styles.linkText}>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>home?</Text>
 				</Link>
-				<Link href="/(app)/card" style={styles.linkText}>
+				
+				<Link href="/(tabs)/card" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
 				</Link>
-				<Link href="/(app)/transaction" style={styles.linkText}>
+				<Link href="/(tabs)/transaction" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>transaction?</Text>
 				</Link>
+				
+				<Link href="/(auth)/kyc-verification" style={styles.linkText}>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>kyc-verification?</Text>
+				</Link>
+
 			</View>
 
 			{/* Section 3: Login Button */}
