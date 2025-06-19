@@ -1,12 +1,12 @@
+import storage from "@react-native-async-storage/async-storage";
 import { router, Stack } from "expo-router";
 import { useEffect } from "react";
-import storage from "@react-native-async-storage/async-storage";
 
 const AuthLayout = () => {
 	useEffect(() => {
 		const token = storage.getItem("access_token").then((token) => {
 			if (!!token) {
-				router.navigate("/(app)");
+				router.navigate("/(tabs)");
 			}
 		});
 	}, []);
