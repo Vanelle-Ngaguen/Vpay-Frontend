@@ -5,8 +5,9 @@ export interface Model {
 }
 
 export interface Card extends Model {
-	number: number;
+	number: string;
 	holder_name: string;
+	balance: number;
 	issuer: string;
 	expiry_date: string;
 }

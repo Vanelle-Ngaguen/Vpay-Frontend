@@ -1,6 +1,7 @@
+import FundCardModal from "@/components/FundCardModal";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
 	ScrollView,
 	StyleSheet,
@@ -10,6 +11,8 @@ import {
 } from "react-native";
 
 const HomePage = () => {
+	const [showFundingModal, setShowFundingModal] = useState<boolean>(false)
+
 	return (
 		<ScrollView style={styles.container}>
 			{/* Top Section */}
@@ -29,16 +32,16 @@ const HomePage = () => {
 
 			{/* Actions Section */}
 			<View style={styles.actionsSection}>
-				<View style={styles.action}>
+				<TouchableOpacity style={styles.action} onPress={() => setShowFundingModal(true)}>
 					<MaterialIcons name="add-circle" size={40} color="green" />
 					<Text style={styles.actionText}>Add Money</Text>
-				</View>
+				</TouchableOpacity>
 				<View style={styles.action}>
 					<MaterialIcons name="remove-circle" size={40} color="red" />
 					<Text style={styles.actionText}>Withdraw</Text>
 				</View>
 				<View style={styles.action}>
-					<Link href="/(app)/card">
+					<Link href="/(tabs)/card">
 						<MaterialIcons name="remove-circle" size={40} color="red" />
 						<Text style={styles.actionText}>My Cards</Text>
 					</Link>
@@ -75,6 +78,8 @@ const HomePage = () => {
 				<Text>Transaction 2</Text>
 				<Text>- XAF 5,000</Text>
 			</View>
+
+			<FundCardModal show={showFundingModal} onClose={() => setShowFundingModal(false)} />
 		</ScrollView>
 	);
 };

@@ -11,7 +11,7 @@ import {
 
 const EmailVerification = () => {
 	const [code, setCode] = useState(new Array(5).fill(""));
-	const inputRefs = useRef<Array<TextInput>>([]);
+	const inputRefs = useRef<TextInput[]>([]);
 
 	const handleChange = (value: any, index: number) => {
 		if (!/^\d?$/.test(value)) return; // Accept only digits or empty
@@ -70,7 +70,7 @@ const EmailVerification = () => {
 
 			{/* Resend Link */}
 			<Text style={styles.resendText}>
-				Didn't receive the code?{" "}
+				Didn&apos;t receive the code?{" "}
 				<Text style={styles.resendLink} onPress={handleResend}>
 					Resend Code
 				</Text>

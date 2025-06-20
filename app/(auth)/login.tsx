@@ -107,6 +107,9 @@ const Login = () => {
 				<Link href="/(auth)/kyc-verification" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>kyc-verification?</Text>
 				</Link>
+				<Link href="/(auth)/fund-card" style={styles.linkText}>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>fund-card?</Text>
+				</Link>
 
 			</View>
 

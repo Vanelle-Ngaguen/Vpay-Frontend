@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const AuthLayout = () => {
 	useEffect(() => {
-		const token = storage.getItem("access_token").then((token) => {
+		storage.getItem("access_token").then((token) => {
 			if (!!token) {
 				router.navigate("/(tabs)");
 			}
