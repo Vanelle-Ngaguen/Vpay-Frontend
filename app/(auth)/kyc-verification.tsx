@@ -22,7 +22,7 @@ const KYCVerification = () => {
     const [faceCaptured, setFaceCaptured] = useState(false);
 
     const handleIDScan = (side: "Front" | "Back") => {
-        Alert.alert(`Scanning ${side} of ID...`, "Simulating scan success for demo purposes.");
+        Alert.alert(`Scanning ${side} of ID...`, "Scan.");
         setIdUploaded(true);
     };
 
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 10,
+        color: '#580097',
     },
     description: {
         fontSize: 16,
@@ -205,8 +206,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "600",
         marginBottom: 15,
-        color: '#333',
+        color: '#580097',
         textAlign: 'center',
+        
     },
     orText: {
         fontSize: 16,
@@ -235,25 +237,26 @@ const styles = StyleSheet.create({
         backgroundColor: "#580097",
         borderColor: "#580097",
         borderStyle: "solid",
-        marginTop: 20,
+        marginTop: 10,
+        borderRadius: 25,
     },
     submitButtonText: {
         color: "#fff",
         fontWeight: "bold",
     },
     buttonCompleted: {
-        backgroundColor: '#e0ffe0',
-        borderColor: 'green',
+        backgroundColor: '#580097',
+       
         borderStyle: 'solid',
     },
     buttonTextCompleted: {
-        color: 'green',
+        color: 'white',
     },
     completionStatus: {
         textAlign: 'center',
         marginTop: 5,
         fontSize: 14,
-        color: 'green',
+        color: '#580097',
         fontWeight: 'bold',
     }
 });

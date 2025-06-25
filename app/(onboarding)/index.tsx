@@ -50,13 +50,13 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 	},
 	buttonContainer: {
-		backgroundColor: "rgba(88, 0, 151, 1)",
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderRadius: 25,
+		width: "90%",
+        padding: 10,
 		marginTop: 20,
-		alignItems: "center",
-		justifyContent: "center", // Ensure the text is centered vertically
+        backgroundColor: "rgba(88, 0, 151, 1)",
+        borderRadius: 25,
+        alignItems: "center",
+        justifyContent: "center",
 	},
 	buttonText: {
 		fontSize: 16,

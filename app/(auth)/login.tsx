@@ -97,7 +97,7 @@ const Login = () => {
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>home?</Text>
 				</Link>
 				
-				<Link href="/(tabs)/card" style={styles.linkText}>
+				<Link href="/(tabs)/cards" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
 				</Link>
 				<Link href="/(tabs)/transaction" style={styles.linkText}>

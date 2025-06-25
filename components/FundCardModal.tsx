@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Config } from "@/constants/Config";
 import { Card } from "@/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -61,7 +62,35 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
     setWalletBalance(balance);
   }, [cards]);
 
-  const handleFundCardSubmit = () => {};
+  const handleFundCardSubmit = () => {
+    setLoading(true);
+    const amount = parseFloat(amountFcfa);
+
+    axios
+      .post(`${Config.url.api}/pay`, {
+        card_id: selectedCard?.id,
+        amount,
+        phone,
+        service: /^6((5[0-4])|(7[0-9]))[0-9]{6}$/.test(phone) ? 'MTN' : 'ORANGE'
+      })
+      .then((response) => {
+        Alert.alert("Success", "Your card has been funded successfully!");
+        setSelectedCard(undefined);
+        setAmountFcfa("0");
+        console.log('payment initiated', response.data);
+      })
+      .catch((error) => {
+        console.error("Error funding card:", {...error});
+        Alert.alert(
+          "Error",
+          "There was an issue funding your card. Please try again."
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+        // onClose(); // Close the modal after funding
+      });
+  };
 
   return (
     <Modal
@@ -436,7 +465,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   accentButton: {
-    backgroundColor: "#FF9800", // Orange accent button
+    backgroundColor: "#580097", // Orange accent button
+    borderRadius: 25,
+    width: "100%",
   },
   accentButtonText: {
     color: "#FFFFFF",

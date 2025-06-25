@@ -23,7 +23,7 @@ const TransactionItem = ({ item }: { item: Transaction }) => {
     <View style={styles.transactionContainer}>
       <View style={styles.nameAmountContainer}>
         <Text style={styles.transactionName}>{item.name}</Text>
-        <Text style={styles.transactionAmount}>${item.amount.toFixed(2)}</Text>
+        <Text style={styles.transactionAmount}>FCFA  {item.amount.toFixed(2)}</Text>
       </View>
       <Text style={styles.transactionDateTime}>{item.date} - {item.time}</Text>
     </View>

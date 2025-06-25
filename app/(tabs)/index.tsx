@@ -1,6 +1,5 @@
 import FundCardModal from "@/components/FundCardModal";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Link } from "expo-router";
 import React, { useState } from "react";
 import {
 	ScrollView,
@@ -24,7 +23,7 @@ const HomePage = () => {
 			{/* Account Balance Section */}
 			<View style={styles.balanceBox}>
 				<Text style={styles.balanceText}>Main Account Balance</Text>
-				<Text style={styles.balanceAmount}>XAF 100,000</Text>
+				<Text style={styles.balanceAmount}>XAF 0.00</Text>
 				<TouchableOpacity>
 					<Text style={styles.convertText}>Convert to USD</Text>
 				</TouchableOpacity>
@@ -34,17 +33,11 @@ const HomePage = () => {
 			<View style={styles.actionsSection}>
 				<TouchableOpacity style={styles.action} onPress={() => setShowFundingModal(true)}>
 					<MaterialIcons name="add-circle" size={40} color="green" />
-					<Text style={styles.actionText}>Add Money</Text>
+					<Text style={styles.actionText}>Add Funds</Text>
 				</TouchableOpacity>
 				<View style={styles.action}>
 					<MaterialIcons name="remove-circle" size={40} color="red" />
 					<Text style={styles.actionText}>Withdraw</Text>
-				</View>
-				<View style={styles.action}>
-					<Link href="/(tabs)/card">
-						<MaterialIcons name="remove-circle" size={40} color="red" />
-						<Text style={styles.actionText}>My Cards</Text>
-					</Link>
 				</View>
 			</View>
 

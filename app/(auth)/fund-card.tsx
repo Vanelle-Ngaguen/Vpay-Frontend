@@ -131,7 +131,7 @@ const WalletScreen = () => {
             await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate a 2-second network request delay
 
             // --- Success Feedback and UI Update ---
-            Alert.alert('Funding Initiated (Simulated)', `Card funding process for ${selectedCard.cardNumberMasked} started successfully with FCFA ${amount}!`);
+            Alert.alert('Funding Initiated', `Card funding process for ${selectedCard.cardNumberMasked}  FCFA. please comfirm the transaction ${amount}!`);
             
             // Simulate updating the main wallet balance by deducting the funded amount
             setMainWalletBalance((prev: number) => prev - amount); 
@@ -155,7 +155,7 @@ const WalletScreen = () => {
 
         } catch (error: any) {
             console.error('Simulated fund card error:', error.message);
-            Alert.alert('Funding Failed (Simulated)', 'Failed to fund card. Please try again.');
+            Alert.alert('Funding Failed ', 'Failed to fund card. Please try again.');
         } finally {
             setLoading(false); // Deactivate loading spinner
         }
@@ -163,18 +163,8 @@ const WalletScreen = () => {
 
     return (
         <ScrollView style={styles.scrollViewContainer} contentContainerStyle={styles.container}>
-            <Text style={styles.header}>Your Wallet</Text>
-            <Text style={styles.subtitle}>Manage your funds and virtual cards.</Text>
-
-            {/* Current Main Wallet Balance Display Card */}
-            <View style={styles.balanceCard}>
-                <Text style={styles.balanceLabel}>Your Main Wallet Balance</Text>
-                {fetchingCards ? ( // Show activity indicator while fetching balance
-                    <ActivityIndicator size="small" color="#1A73E8" />
-                ) : (
-                    <Text style={styles.balanceAmount}>FCFA {mainWalletBalance.toLocaleString()}</Text>
-                )}
-            </View>
+            
+            
 
             {/* Button to open the funding modal */}
             <TouchableOpacity 
@@ -183,6 +173,14 @@ const WalletScreen = () => {
             >
                 <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#FFFFFF" />
                 <Text style={styles.openFundModalButtonText}>Fund a Virtual Card</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+                style={styles.openFundModalButton} 
+                onPress={() => setFundModalVisible(true)} // Opens the modal
+            >
+                <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#FFFFFF" />
+                <Text style={styles.openFundModalButtonText}>Fund Main Account</Text>
             </TouchableOpacity>
 
             {/* Funding Modal Component */}
@@ -373,10 +371,10 @@ const styles = StyleSheet.create({
     },
     // Style for the button that opens the modal on the main screen
     openFundModalButton: {
-        backgroundColor: '#1A73E8', 
+        backgroundColor: '#580097', 
         paddingVertical: 15,
         paddingHorizontal: 20,
-        borderRadius: 10,
+        borderRadius: 25,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row', 
@@ -483,8 +481,8 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
     },
     selectedCardOption: {
-        backgroundColor: '#1A73E8',
-        borderColor: '#FF9800',
+        backgroundColor: '#580097',
+        borderColor: '#000000',
     },
     cardOptionText: {
         fontSize: 14,
@@ -500,13 +498,13 @@ const styles = StyleSheet.create({
         color: '#666666',
     },
     selectedCardInfo: {
-        backgroundColor: 'rgba(33,150,243,0.1)',
+        backgroundColor: 'rgba(181, 180, 182, 0.87))',
         borderRadius: 10,
         padding: 15,
         marginBottom: 20,
         width: '100%',
         borderWidth: 1,
-        borderColor: 'rgba(33,150,243,0.5)',
+        
     },
     selectedCardText: {
         fontSize: 14,
@@ -559,7 +557,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     accentButton: {
-        backgroundColor: '#FF9800', // Orange accent button
+        backgroundColor: '#580097',
+        borderRadius: 25, // Orange accent button
     },
     accentButtonText: {
         color: '#FFFFFF',

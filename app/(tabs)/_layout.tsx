@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
@@ -14,7 +14,7 @@ export default function TabLayout() {
           if (route.name === "index") {
             return <Ionicons name="home" size={size} color={color} />;
           } else if (route.name === "cards") {
-            return <MaterialCommunityIcons name="wallet" size={size} color={color} />;
+            return <MaterialIcons name="wallet" size={size} color={color} />;
           } else if (route.name === "transaction") {
             return <Ionicons name="swap-horizontal" size={size} color={color} />;
           }

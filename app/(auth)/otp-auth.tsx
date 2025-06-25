@@ -1,16 +1,16 @@
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
+	Image,
+	StyleSheet,
+	Text,
+	TextInput,
+	View
 } from "react-native";
 
 const EmailVerification = () => {
 	const [code, setCode] = useState(new Array(5).fill(""));
-	const inputRefs = useRef<Array<TextInput>>([]);
+	const inputRefs = useRef<TextInput[]>([]);
 
 	const handleChange = (value: any, index: number) => {
 		if (!/^\d?$/.test(value)) return; // Accept only digits or empty
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#580097",
 		paddingVertical: 12,
 		paddingHorizontal: 30,
-		borderRadius: 5,
+		borderRadius: 25,
 	},
 	verifyText: {
 		color: "#fff",

@@ -1,11 +1,11 @@
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import {
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 const OnboardingLogin = () => {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: 10,
         backgroundColor: "rgba(88, 0, 151, 1)",
-        borderRadius: 5,
+        borderRadius: 25,
         alignItems: "center",
         justifyContent: "center",
     },
