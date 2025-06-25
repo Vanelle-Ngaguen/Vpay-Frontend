@@ -8,14 +8,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
     ActivityIndicator,
-    Alert,
     Modal,
     ScrollView,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 
 interface Props {
@@ -136,16 +135,26 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
                 </Text>
                 <TouchableOpacity
                   style={[styles.button, styles.secondaryButton]}
+                  disabled={loading}
                   onPress={() => {
-                    Alert.alert(
-                      "Navigate",
-                      "This would navigate to the Virtual Card Creation screen."
-                    );
-                    onClose(); // Close modal before attempting navigation
+                      setLoading(true)
+                    storage.getItem("access_token").then((token) => {
+                      axios
+                        .post<Card>(`${Config.url.api}/card`, {}, {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        })
+                        .then((response) => setCards(cards => [...cards, response.data]))
+                        .catch((reason) => console.warn(reason))
+                        .finally(() => setLoading(false));
+                    });
                   }}
                 >
+                  {loading && <ActivityIndicator size={24} />}
+
                   <Text style={[styles.buttonText, styles.secondaryButtonText]}>
-                    Create New Card
+                    {loading ? 'Creating card...' : 'Create New Card'}
                   </Text>
                 </TouchableOpacity>
               </View>
