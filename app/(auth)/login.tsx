@@ -1,9 +1,11 @@
 import { Config } from "@/constants/Config";
+import { AuthContext } from "@/contexts/AuthContext";
+import { User } from "@/types";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import storage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Image,
 	StyleSheet,
@@ -14,6 +16,8 @@ import {
 } from "react-native";
 
 const Login = () => {
+	const { setUser, setToken } = useContext(AuthContext);
+
 	const [email, setEmail] = useState<string>();
 	const [password, setPassword] = useState<string>();
 
@@ -23,10 +27,14 @@ const Login = () => {
 
 	const handleLogin = () => {
 		axios
-			.post(`${Config.url.api}/login`, { email, password })
-			.then((response) => {
-				storage.setItem("access_token", response.data.token).then(() => {
-					console.log("redirecting");
+			.post<{ token: string; user: User }>(`${Config.url.api}/login`, {
+				email,
+				password,
+			})
+			.then(({ data }) => {
+				storage.setItem("access_token", data.token).then(() => {
+					setUser(data.user);
+					setToken(data.token);
 					router.navigate("/(tabs)");
 				});
 			})
@@ -96,21 +104,22 @@ const Login = () => {
 				<Link href="/(tabs)" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>home?</Text>
 				</Link>
-				
+
 				<Link href="/(tabs)/cards" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>CARD?</Text>
 				</Link>
 				<Link href="/(tabs)/transaction" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>transaction?</Text>
 				</Link>
-				
+
 				<Link href="/(auth)/kyc-verification" style={styles.linkText}>
-					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>kyc-verification?</Text>
+					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>
+						kyc-verification?
+					</Text>
 				</Link>
 				<Link href="/(auth)/fund-card" style={styles.linkText}>
 					<Text style={{ color: "rgba(88, 0, 151, 1)" }}>fund-card?</Text>
 				</Link>
-
 			</View>
 
 			{/* Section 3: Login Button */}

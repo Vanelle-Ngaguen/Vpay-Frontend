@@ -9,5 +9,14 @@ export interface Card extends Model {
 	holder_name: string;
 	balance: number;
 	issuer: string;
+	cvv: number;
 	expiry_date: string;
+}
+
+export interface User extends Model {
+	name: string;
+	username: string;
+	email: string;
+	phone: string;
+	email_verified_at: string | null;
 }

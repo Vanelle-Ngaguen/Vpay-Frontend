@@ -1,6 +1,13 @@
 import FundCardModal from "@/components/FundCardModal";
+import { CardContext } from "@/contexts/CardContext";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import {
 	ScrollView,
 	StyleSheet,
@@ -10,7 +17,17 @@ import {
 } from "react-native";
 
 const HomePage = () => {
-	const [showFundingModal, setShowFundingModal] = useState<boolean>(false)
+	const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
+	const { cards, setCards, loadCards } = useContext(CardContext);
+
+	const walletBalance = useMemo(
+		() => cards.reduce((acc, card) => acc + card.balance, 0),
+		[cards],
+	);
+
+	useEffect(() => {
+		loadCards();
+	}, []);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -23,7 +40,7 @@ const HomePage = () => {
 			{/* Account Balance Section */}
 			<View style={styles.balanceBox}>
 				<Text style={styles.balanceText}>Main Account Balance</Text>
-				<Text style={styles.balanceAmount}>XAF 0.00</Text>
+				<Text style={styles.balanceAmount}>XAF {walletBalance}</Text>
 				<TouchableOpacity>
 					<Text style={styles.convertText}>Convert to USD</Text>
 				</TouchableOpacity>
@@ -31,7 +48,10 @@ const HomePage = () => {
 
 			{/* Actions Section */}
 			<View style={styles.actionsSection}>
-				<TouchableOpacity style={styles.action} onPress={() => setShowFundingModal(true)}>
+				<TouchableOpacity
+					style={styles.action}
+					onPress={() => setShowFundingModal(true)}
+				>
 					<MaterialIcons name="add-circle" size={40} color="green" />
 					<Text style={styles.actionText}>Add Funds</Text>
 				</TouchableOpacity>
@@ -72,7 +92,10 @@ const HomePage = () => {
 				<Text>- XAF 5,000</Text>
 			</View>
 
-			<FundCardModal show={showFundingModal} onClose={() => setShowFundingModal(false)} />
+			<FundCardModal
+				show={showFundingModal}
+				onClose={() => setShowFundingModal(false)}
+			/>
 		</ScrollView>
 	);
 };

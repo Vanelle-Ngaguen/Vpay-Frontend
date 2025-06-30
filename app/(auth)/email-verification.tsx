@@ -1,3 +1,4 @@
+import { Config } from "@/constants/Config";
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
@@ -8,17 +9,19 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import storage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const EmailVerification = () => {
-	const [code, setCode] = useState(new Array(5).fill(""));
+	const [otp, setOTP] = useState(new Array(5).fill(""));
 	const inputRefs = useRef<TextInput[]>([]);
 
 	const handleChange = (value: any, index: number) => {
 		if (!/^\d?$/.test(value)) return; // Accept only digits or empty
 
-		const newCode = [...code];
+		const newCode = [...otp];
 		newCode[index] = value;
-		setCode(newCode);
+		setOTP(newCode);
 
 		// Move focus
 		if (value && index < 4) {
@@ -27,8 +30,19 @@ const EmailVerification = () => {
 	};
 
 	const handleVerify = () => {
-		alert(`Verification code entered: ${code.join("")}`);
-		router.navigate("/(auth)/login"); // Replace with your Login screen route
+		storage.getItem("access_token").then((token) => {
+			axios
+				.post(
+					`${Config.url.api}/otp/verify`,
+					{ otp: otp.join("") },
+					{
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					},
+				)
+				.then(() => router.navigate("/(auth)/login"));
+		});
 	};
 
 	const handleResend = () => {
@@ -53,7 +67,7 @@ const EmailVerification = () => {
 
 			{/* Code Inputs */}
 			<View style={styles.inputRow}>
-				{code.map((digit, index) => (
+				{otp.map((digit, index) => (
 					<TextInput
 						key={index}
 						ref={(ref) => {

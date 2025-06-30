@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Config } from "@/constants/Config";
+import { CardContext } from "@/contexts/CardContext";
 import { Card } from "@/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import storage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
 	ActivityIndicator,
 	Modal,
@@ -22,9 +23,10 @@ interface Props {
 	onClose: VoidFunction;
 }
 const FundCardModal = ({ show = false, onClose }: Props) => {
+	const { cards, setCards } = useContext(CardContext);
+
 	const [loading, setLoading] = useState(false);
 	const [fetchingCards, setFetchingCards] = useState(false);
-	const [cards, setCards] = useState<Card[]>([]);
 	const [selectedCard, setSelectedCard] = useState<Card>();
 	const [walletBalance, setWalletBalance] = useState<number>(0);
 	const [amountFcfa, setAmountFcfa] = useState<string>("0");
@@ -51,36 +53,24 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 	};
 
 	useEffect(() => {
-		setFetchingCards(true);
-		storage
-			.getItem("cards")
-			.then((items) => {
-				if (!!items) {
-					setCards(JSON.parse(items));
-				} else {
-					storage.getItem("access_token").then((token) => {
-						axios
-							.get(`${Config.url.api}/cards`, {
-								headers: {
-									Authorization: `Bearer ${token}`,
-								},
-							})
-							.then((response) => setCards(response.data))
-							.catch((reason) => console.warn(reason))
-							.finally(() => setLoading(false));
-					});
-				}
-			})
-			.finally(() => setFetchingCards(false));
-	}, []);
-
-	useEffect(() => {
 		const balance = cards.reduce((balance, card) => card.balance + balance, 0);
 
 		setWalletBalance(balance);
 	}, [cards]);
 
-	const handleFundCardSubmit = () => {};
+	const handleFundCardSubmit = () => {
+		const regex = new RegExp(/^6(5[0-4]|[78]\d)\d{6}$/);
+
+		axios
+			.post(`${Config.url.api}/pay`, {
+				phone,
+				amount: amountFcfa,
+				card_id: selectedCard?.id,
+				service: regex.test(phone) ? "MTN" : "ORANGE",
+			})
+			.then(onClose)
+			.catch();
+	};
 
 	return (
 		<Modal
@@ -183,7 +173,7 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 														},
 													]}
 												>
-													Bal: ${card.balance.toFixed(2)}{" "}
+													Bal: ${(card.balance / 600).toFixed(2)}{" "}
 													{/* Using toFixed for string display */}
 												</Text>
 											</LinearGradient>
@@ -232,7 +222,7 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 							<Text style={styles.inputLabel}>Mobile Money Phone Number</Text>
 							<TextInput
 								style={styles.textInput}
-								placeholder="+237XXXXXXXXX"
+								placeholder="6XXXXXXXX"
 								value={phone}
 								onChangeText={setPhone}
 								keyboardType="phone-pad"
@@ -247,19 +237,19 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 								style={[
 									styles.textInput,
 									// Apply error style if amount is invalid or exceeds balance
-									parseFloat(amountFcfa) < 1000 &&
+									parseFloat(amountFcfa) < 100 &&
 										!fetchingCards &&
 										styles.inputError,
 								]}
-								placeholder="e.g., 10000"
+								placeholder="e.g., 1000"
 								value={amountFcfa}
 								onChangeText={setAmountFcfa}
 								keyboardType="numeric"
 							/>
 							{/* Display error message if amount exceeds balance */}
-							{parseFloat(amountFcfa) < 1000 && (
+							{parseFloat(amountFcfa) < 100 && (
 								<Text style={styles.errorText}>
-									Minimum topup amount is 1000 (FCFA )
+									Minimum topup amount is 100 (FCFA )
 								</Text>
 							)}
 						</View>
@@ -275,7 +265,7 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 								!selectedCard ||
 								!phone ||
 								!amountFcfa ||
-								parseFloat(amountFcfa) < 1000) &&
+								parseFloat(amountFcfa) < 100) &&
 								styles.buttonDisabled,
 						]}
 						onPress={handleFundCardSubmit} // Trigger the funding submission
@@ -285,7 +275,7 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 							!phone ||
 							phone?.length < 9 ||
 							!amountFcfa ||
-							parseFloat(amountFcfa) < 1000
+							parseFloat(amountFcfa) < 100
 						}
 					>
 						{loading ? (

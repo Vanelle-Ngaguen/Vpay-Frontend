@@ -1,9 +1,20 @@
 import { Card } from "@/types";
-import { createContext, useState } from "react";
+import {
+	createContext,
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	useState,
+} from "react";
 
-const [cards, setCards] = useState<Array<Card>>();
+interface CreditCardContext {
+	cards: Array<Card>;
+	setCards: Dispatch<SetStateAction<Array<Card>>>;
+	loadCards: () => Promise<any>;
+}
 
-export const CardContext = createContext<{
-  cards: Array<Card>;
-  setCards: (cards: Array<Card>) => void;
-}>({ cards, setCards });
+export const CardContext = createContext<CreditCardContext>({
+	cards: [],
+	setCards: () => {},
+	loadCards: () => Promise.resolve(),
+});
