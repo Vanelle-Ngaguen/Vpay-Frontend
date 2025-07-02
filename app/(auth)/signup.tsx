@@ -3,7 +3,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import storage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { router, useLocalSearchParams } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
 import {
 	Image,
@@ -29,11 +29,9 @@ const SignUp = () => {
 	const toggleConfirmPasswordVisibility = () =>
 		setShowConfirmPassword(!showConfirmPassword);
 
-	useEffect(() => {
-		if (!name || !username) {
-			router.navigate("/(onboarding)/onlogin");
-		}
-	}, [name, username]);
+	if (!name || !username) {
+		return <Redirect href="/(onboarding)/onlogin" />;
+	}
 
 	const handleSignup = () => {
 		const data = {

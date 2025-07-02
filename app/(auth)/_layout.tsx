@@ -1,44 +1,51 @@
-import { AuthContext } from "@/contexts/AuthContext";
+import { Config } from "@/constants/Config";
+import AuthContextProvider, { AuthContext } from "@/contexts/AuthContext";
 import { User } from "@/types";
-import storage from "@react-native-async-storage/async-storage";
+import axios, { AxiosResponse } from "axios";
 import { router, Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 
 const AuthLayout = () => {
-	const [token, setToken] = useState<string | undefined>();
-	const [user, setUser] = useState<User | undefined>();
+	const { token, setToken, setUser } = useContext(AuthContext);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		// storage.getItem("access_token").then((token) => {
-		// 	if (!!token) {
-		// 		router.navigate("/(tabs)");
-		// 		return;
-		// 	}
-		// });
+		// console.log(token);
+		if (token) {
+			axios
+				.get<User>(`${Config.url.api}/user`)
+				.then((response) => {
+					router.navigate("/(tabs)");
+				})
+				.catch(() => {
+					// Reset token an user
+					setToken();
+					setUser();
+				});
+		}
 	}, []);
 
 	return (
-		<AuthContext value={{ token, setToken, user, setUser }}>
-			<Stack
-				screenOptions={{
-					headerShown: true,
-					headerStyle: { backgroundColor: "#580097" },
-					headerTintColor: "#ffffff",
-					headerTitleStyle: {},
-				}}
-			>
-				<Stack.Screen name="login" options={{ title: "Login" }} />
-				<Stack.Screen name="signup" options={{ title: "Sign Up" }} />
-				<Stack.Screen
-					name="kyc-verification"
-					options={{ title: "KYC Verification" }}
-				/>
-				<Stack.Screen
-					name="email-verification"
-					options={{ title: "Account Verification" }}
-				/>
-			</Stack>
-		</AuthContext>
+		<Stack
+			screenOptions={{
+				headerShown: true,
+				headerStyle: { backgroundColor: "#580097" },
+				headerTintColor: "#ffffff",
+				headerTitleStyle: {},
+			}}
+		>
+			<Stack.Screen name="login" options={{ title: "Login" }} />
+			<Stack.Screen name="signup" options={{ title: "Sign Up" }} />
+			<Stack.Screen
+				name="kyc-verification"
+				options={{ title: "KYC Verification" }}
+			/>
+			<Stack.Screen
+				name="email-verification"
+				options={{ title: "Account Verification" }}
+			/>
+		</Stack>
 	);
 };
 

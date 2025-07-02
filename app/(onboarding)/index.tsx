@@ -1,7 +1,15 @@
-import { Link } from "expo-router";
+import { AuthContext } from "@/contexts/AuthContext";
+import { Link, Redirect, router } from "expo-router";
+import { useContext, useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 const Onboarding = () => {
+	const { token } = useContext(AuthContext);
+
+	if (!!token) {
+		return <Redirect href="/(auth)/login" />;
+	}
+
 	return (
 		<View style={styles.container}>
 			<Image
@@ -51,12 +59,12 @@ const styles = StyleSheet.create({
 	},
 	buttonContainer: {
 		width: "90%",
-        padding: 10,
+		padding: 10,
 		marginTop: 20,
-        backgroundColor: "rgba(88, 0, 151, 1)",
-        borderRadius: 25,
-        alignItems: "center",
-        justifyContent: "center",
+		backgroundColor: "rgba(88, 0, 151, 1)",
+		borderRadius: 25,
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	buttonText: {
 		fontSize: 16,
