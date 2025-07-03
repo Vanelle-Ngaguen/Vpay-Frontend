@@ -2,7 +2,7 @@ import { Card } from "@/types";
 import {
 	createContext,
 	Dispatch,
-	ReactNode,
+	PropsWithChildren,
 	SetStateAction,
 	useState,
 } from "react";
@@ -18,3 +18,13 @@ export const CardContext = createContext<CreditCardContext>({
 	setCards: () => {},
 	loadCards: () => Promise.resolve(),
 });
+
+const CardContextProvider = ({ children }: PropsWithChildren) => {
+	const [cards, setCards] = useState<Array<Card>>([]);
+	const loadCards = async () => {};
+	return (
+		<CardContext value={{ cards, setCards, loadCards }}>{children}</CardContext>
+	);
+};
+
+export default CardContextProvider;

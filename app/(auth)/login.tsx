@@ -16,7 +16,7 @@ import {
 } from "react-native";
 
 const Login = () => {
-	const { setUser, setToken } = useContext(AuthContext);
+	const { setUser, setToken, user } = useContext(AuthContext);
 
 	const [email, setEmail] = useState<string>();
 	const [password, setPassword] = useState<string>();

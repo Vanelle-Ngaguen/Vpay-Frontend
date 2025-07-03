@@ -1,9 +1,9 @@
-import AuthContextProvider, { AuthContext } from "@/contexts/AuthContext";
-import storage from "@react-native-async-storage/async-storage";
+import AuthContextProvider from "@/contexts/AuthContext";
+import LoadingContextProvider from "@/contexts/LoadingContext";
 import { useFonts } from "expo-font";
-import { Redirect, Stack, router } from "expo-router";
+import { Stack } from "expo-router";
 import * as React from "react";
-import { useEffect } from "react";
+import { MenuProvider } from "react-native-popup-menu";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -20,18 +20,22 @@ const App = () => {
 
 	return (
 		<SafeAreaProvider>
-			<AuthContextProvider>
-				<Stack
-					screenOptions={{
-						headerShown: false,
-					}}
-				>
-					<Stack.Screen name="(onboarding)" />
-					<Stack.Screen name="(tabs)" />
-					<Stack.Screen name="(auth)" options={{ headerShown: false }} />
-					<Stack.Screen name="+not-found" />
-				</Stack>
-			</AuthContextProvider>
+			<LoadingContextProvider>
+				<AuthContextProvider>
+					<MenuProvider>
+						<Stack
+							screenOptions={{
+								headerShown: false,
+							}}
+						>
+							<Stack.Screen name="(onboarding)" />
+							<Stack.Screen name="(tabs)" />
+							<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+							<Stack.Screen name="+not-found" />
+						</Stack>
+					</MenuProvider>
+				</AuthContextProvider>
+			</LoadingContextProvider>
 		</SafeAreaProvider>
 	);
 };

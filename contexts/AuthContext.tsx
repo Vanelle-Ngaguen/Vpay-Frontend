@@ -1,20 +1,23 @@
+import { Config } from "@/constants/Config";
 import { User } from "@/types";
+import storage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import {
 	createContext,
-	Dispatch,
-	ReactNode,
-	SetStateAction,
+	PropsWithChildren,
+	useContext,
 	useEffect,
-	useLayoutEffect,
 	useState,
 } from "react";
-import storage from "@react-native-async-storage/async-storage";
+import { Text } from "react-native";
+import { LoadingContext } from "./LoadingContext";
 
 interface AuthContextInterface {
 	token: string | undefined;
 	setToken: (user?: string | undefined) => void;
 	user: undefined | User;
 	setUser: (user?: User | undefined) => void;
+	getUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextInterface>({
@@ -22,21 +25,35 @@ export const AuthContext = createContext<AuthContextInterface>({
 	setToken: () => {},
 	user: undefined,
 	setUser: () => {},
+	getUser: () => Promise.resolve(),
 });
 
-const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+const AuthContextProvider = ({ children }: PropsWithChildren) => {
 	const [token, setTokenState] = useState<string | undefined>(undefined);
 	const [user, setUserState] = useState<User | undefined>(undefined);
+	const { loading, setLoading } = useContext(LoadingContext);
 
-	useLayoutEffect(() => {
+	const getUser = () =>
+		axios
+			.get<User>(`${Config.url.api}/user`, {
+				headers: { Authorization: "Bearer " + token },
+			})
+			.then((response) => {
+				setUserState(response.data);
+			});
+
+	useEffect(() => {
+		setLoading(true);
 		storage.getItem("access_token").then((access_token) => {
+			console.log("wtf", token);
 			console.log("getting access token", access_token);
 			setTokenState(access_token || undefined);
-		});
-		storage.getItem("user").then((userData) => {
-			setTokenState(
-				typeof userData == "string" ? JSON.parse(userData) : undefined,
-			);
+			storage.getItem("user").then((userData) => {
+				setUserState(
+					typeof userData == "string" ? JSON.parse(userData) : undefined,
+				);
+				setLoading(false);
+			});
 		});
 	}, []);
 
@@ -54,8 +71,9 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	return (
-		<AuthContext value={{ token, user, setUser, setToken }}>
+		<AuthContext value={{ token, user, setUser, setToken, getUser }}>
 			{children}
+			<Text>Token is: {token}</Text>
 		</AuthContext>
 	);
 };

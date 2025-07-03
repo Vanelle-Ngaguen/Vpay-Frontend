@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Config } from "@/constants/Config";
+import { AuthContext } from "@/contexts/AuthContext";
 import { CardContext } from "@/contexts/CardContext";
 import { Card } from "@/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import storage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
+import { Link, Redirect } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -24,6 +26,7 @@ interface Props {
 }
 const FundCardModal = ({ show = false, onClose }: Props) => {
 	const { cards, setCards } = useContext(CardContext);
+	const { user } = useContext(AuthContext);
 
 	const [loading, setLoading] = useState(false);
 	const [fetchingCards, setFetchingCards] = useState(false);
@@ -80,7 +83,7 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 			onRequestClose={onClose} // Handles closing with Android's back button
 		>
 			<View style={styles.centeredView}>
-				<ScrollView style={styles.modalView}>
+				<View style={styles.modalView}>
 					<Text style={styles.modalTitle}>Fund Your Virtual Card</Text>
 					<TouchableOpacity
 						style={styles.closeModalButton}
@@ -92,201 +95,236 @@ const FundCardModal = ({ show = false, onClose }: Props) => {
 							color="#666666"
 						/>
 					</TouchableOpacity>
-
-					{/* Section for Card Selection within the Modal */}
-					<View style={styles.sectionInModal}>
-						<Text style={styles.sectionTitle}>1. Choose a Card to Fund:</Text>
-						{fetchingCards ? ( // Show spinner during card data fetch
-							<ActivityIndicator
-								size="large"
-								color="#1A73E8"
-								style={styles.spinner}
-							/>
-						) : cards.length === 0 ? (
-							// Message if no reloadable cards are found
-							<View style={styles.emptyCardsContainer}>
-								<MaterialCommunityIcons
-									name="credit-card-off-outline"
-									size={60}
-									color="#666666"
-								/>
-								<Text style={styles.emptyCardsText}>
-									No active reloadable virtual cards found. Please create one
-									first.
+					{user?.kyc && user.kyc.approved ? (
+						<ScrollView>
+							{/* Section for Card Selection within the Modal */}
+							<View style={styles.sectionInModal}>
+								<Text style={styles.sectionTitle}>
+									1. Choose a Card to Fund:
 								</Text>
-								<TouchableOpacity
-									style={[styles.button, styles.secondaryButton]}
-									disabled={loading}
-									onPress={handleCardCreation}
-								>
-									{loading && <ActivityIndicator size={24} />}
-
-									<Text style={[styles.buttonText, styles.secondaryButtonText]}>
-										{loading ? "Creating card..." : "Create New Card"}
-									</Text>
-								</TouchableOpacity>
-							</View>
-						) : (
-							<View>
-								<ScrollView
-									horizontal
-									showsHorizontalScrollIndicator={false}
-									style={styles.cardSelector}
-								>
-									{cards.map((card: Card) => (
+								{fetchingCards ? ( // Show spinner during card data fetch
+									<ActivityIndicator
+										size="large"
+										color="#1A73E8"
+										style={styles.spinner}
+									/>
+								) : cards.length === 0 ? (
+									// Message if no reloadable cards are found
+									<View style={styles.emptyCardsContainer}>
+										<MaterialCommunityIcons
+											name="credit-card-off-outline"
+											size={60}
+											color="#666666"
+										/>
+										<Text style={styles.emptyCardsText}>
+											No active reloadable virtual cards found. Please create
+											one first.
+										</Text>
 										<TouchableOpacity
-											key={card.id}
-											onPress={() => setSelectedCard(card)} // Set the selected card
+											style={[styles.button, styles.secondaryButton]}
+											disabled={loading}
+											onPress={handleCardCreation}
 										>
-											<LinearGradient
-												colors={["#000000", "#9664c4", "#a97bcc"]}
-												locations={[0, 0.85, 1]}
-												start={{ y: 1, x: 0 }}
-												end={{ x: 1, y: 0 }}
-												style={[
-													styles.cardOption,
-													selectedCard?.id === card.id &&
-														styles.selectedCardOption, // Highlight selected card
-												]}
+											{loading && <ActivityIndicator size={24} />}
+
+											<Text
+												style={[styles.buttonText, styles.secondaryButtonText]}
 											>
-												<MaterialCommunityIcons
-													name="credit-card-outline"
-													size={24}
-													color={
-														selectedCard?.id === card.id ? "#fff" : "#580097"
-													}
-												/>
-												<Text
-													style={[
-														styles.cardOptionText,
-														selectedCard?.id === card.id &&
-															styles.selectedCardOptionText,
-													]}
-												>
-													{card.number}
-												</Text>
-												<Text
-													style={[
-														styles.cardOptionBalance,
-														selectedCard?.id === card.id && {
-															color: "#FFFFFF",
-														},
-													]}
-												>
-													Bal: ${(card.balance / 600).toFixed(2)}{" "}
-													{/* Using toFixed for string display */}
-												</Text>
-											</LinearGradient>
+												{loading ? "Creating card..." : "Create New Card"}
+											</Text>
 										</TouchableOpacity>
-									))}
-								</ScrollView>
-								<TouchableOpacity
-									style={[styles.button, styles.secondaryButton]}
-									disabled={loading}
-									onPress={handleCardCreation}
-								>
-									{loading && <ActivityIndicator size={24} />}
+									</View>
+								) : (
+									<View>
+										<ScrollView
+											horizontal
+											showsHorizontalScrollIndicator={false}
+											style={styles.cardSelector}
+										>
+											{cards.map((card: Card) => (
+												<TouchableOpacity
+													key={card.id}
+													onPress={() => setSelectedCard(card)} // Set the selected card
+												>
+													<LinearGradient
+														colors={["#000000", "#9664c4", "#a97bcc"]}
+														locations={[0, 0.85, 1]}
+														start={{ y: 1, x: 0 }}
+														end={{ x: 1, y: 0 }}
+														style={[
+															styles.cardOption,
+															selectedCard?.id === card.id &&
+																styles.selectedCardOption, // Highlight selected card
+														]}
+													>
+														<MaterialCommunityIcons
+															name="credit-card-outline"
+															size={24}
+															color={
+																selectedCard?.id === card.id
+																	? "#fff"
+																	: "#580097"
+															}
+														/>
+														<Text
+															style={[
+																styles.cardOptionText,
+																selectedCard?.id === card.id &&
+																	styles.selectedCardOptionText,
+															]}
+														>
+															{card.number}
+														</Text>
+														<Text
+															style={[
+																styles.cardOptionBalance,
+																selectedCard?.id === card.id && {
+																	color: "#FFFFFF",
+																},
+															]}
+														>
+															Bal: ${(card.balance / 600).toFixed(2)}{" "}
+															{/* Using toFixed for string display */}
+														</Text>
+													</LinearGradient>
+												</TouchableOpacity>
+											))}
+										</ScrollView>
+										<TouchableOpacity
+											style={[styles.button, styles.secondaryButton]}
+											disabled={loading}
+											onPress={handleCardCreation}
+										>
+											{loading && <ActivityIndicator size={24} />}
 
-									<Text style={[styles.buttonText, styles.secondaryButtonText]}>
-										{loading ? "Creating card..." : "Create New Card"}
-									</Text>
-								</TouchableOpacity>
+											<Text
+												style={[styles.buttonText, styles.secondaryButtonText]}
+											>
+												{loading ? "Creating card..." : "Create New Card"}
+											</Text>
+										</TouchableOpacity>
+									</View>
+								)}
+
+								{/* Display details of the currently selected card within the modal */}
+								{selectedCard && (
+									<View style={styles.selectedCardInfo}>
+										<Text style={styles.selectedCardText}>
+											Selected Card:{" "}
+											<Text style={styles.selectedCardValue}>
+												{selectedCard.number}
+											</Text>
+										</Text>
+										<Text style={styles.selectedCardText}>
+											Current Card Balance:{" "}
+											<Text style={styles.selectedCardValue}>
+												${selectedCard.balance.toFixed(2)}
+											</Text>
+										</Text>
+									</View>
+								)}
 							</View>
-						)}
 
-						{/* Display details of the currently selected card within the modal */}
-						{selectedCard && (
-							<View style={styles.selectedCardInfo}>
-								<Text style={styles.selectedCardText}>
-									Selected Card:{" "}
-									<Text style={styles.selectedCardValue}>
-										{selectedCard.number}
+							{/* Section for Funding Details Form Fields within the Modal */}
+							<View style={styles.sectionInModal}>
+								<Text style={styles.sectionTitle}>2. Funding Details:</Text>
+
+								{/* Mobile Money Phone Number Input */}
+								<View style={styles.inputContainer}>
+									<Text style={styles.inputLabel}>
+										Mobile Money Phone Number
 									</Text>
-								</Text>
-								<Text style={styles.selectedCardText}>
-									Current Card Balance:{" "}
-									<Text style={styles.selectedCardValue}>
-										${selectedCard.balance.toFixed(2)}
-									</Text>
-								</Text>
+									<TextInput
+										style={styles.textInput}
+										placeholder="6XXXXXXXX"
+										value={phone}
+										onChangeText={setPhone}
+										keyboardType="phone-pad"
+										autoCapitalize="none"
+									/>
+								</View>
+
+								{/* Amount to Fund Input */}
+								<View style={styles.inputContainer}>
+									<Text style={styles.inputLabel}>Amount to Fund (FCFA)</Text>
+									<TextInput
+										style={[
+											styles.textInput,
+											// Apply error style if amount is invalid or exceeds balance
+											parseFloat(amountFcfa) < 100 &&
+												!fetchingCards &&
+												styles.inputError,
+										]}
+										placeholder="e.g., 1000"
+										value={amountFcfa}
+										onChangeText={setAmountFcfa}
+										keyboardType="numeric"
+									/>
+									{/* Display error message if amount exceeds balance */}
+									{parseFloat(amountFcfa) < 100 && (
+										<Text style={styles.errorText}>
+											Minimum topup amount is 100 (FCFA )
+										</Text>
+									)}
+								</View>
 							</View>
-						)}
-					</View>
 
-					{/* Section for Funding Details Form Fields within the Modal */}
-					<View style={styles.sectionInModal}>
-						<Text style={styles.sectionTitle}>2. Funding Details:</Text>
-
-						{/* Mobile Money Phone Number Input */}
-						<View style={styles.inputContainer}>
-							<Text style={styles.inputLabel}>Mobile Money Phone Number</Text>
-							<TextInput
-								style={styles.textInput}
-								placeholder="6XXXXXXXX"
-								value={phone}
-								onChangeText={setPhone}
-								keyboardType="phone-pad"
-								autoCapitalize="none"
-							/>
-						</View>
-
-						{/* Amount to Fund Input */}
-						<View style={styles.inputContainer}>
-							<Text style={styles.inputLabel}>Amount to Fund (FCFA)</Text>
-							<TextInput
+							{/* Fund Button within the Modal */}
+							<TouchableOpacity
 								style={[
-									styles.textInput,
-									// Apply error style if amount is invalid or exceeds balance
-									parseFloat(amountFcfa) < 100 &&
-										!fetchingCards &&
-										styles.inputError,
+									styles.button,
+									styles.accentButton,
+									// Disable button if form is invalid or loading
+									(loading ||
+										!selectedCard ||
+										!phone ||
+										!amountFcfa ||
+										parseFloat(amountFcfa) < 100) &&
+										styles.buttonDisabled,
 								]}
-								placeholder="e.g., 1000"
-								value={amountFcfa}
-								onChangeText={setAmountFcfa}
-								keyboardType="numeric"
-							/>
-							{/* Display error message if amount exceeds balance */}
-							{parseFloat(amountFcfa) < 100 && (
-								<Text style={styles.errorText}>
-									Minimum topup amount is 100 (FCFA )
-								</Text>
-							)}
-						</View>
-					</View>
-
-					{/* Fund Button within the Modal */}
-					<TouchableOpacity
-						style={[
-							styles.button,
-							styles.accentButton,
-							// Disable button if form is invalid or loading
-							(loading ||
-								!selectedCard ||
-								!phone ||
-								!amountFcfa ||
-								parseFloat(amountFcfa) < 100) &&
-								styles.buttonDisabled,
-						]}
-						onPress={handleFundCardSubmit} // Trigger the funding submission
-						disabled={
-							loading ||
-							!selectedCard ||
-							!phone ||
-							phone?.length < 9 ||
-							!amountFcfa ||
-							parseFloat(amountFcfa) < 100
-						}
-					>
-						{loading ? (
-							<ActivityIndicator size="small" color="#FFFFFF" /> // Show spinner if loading
-						) : (
-							<Text style={[styles.buttonText, styles.accentButtonText]}>
-								Fund Card Now
+								onPress={handleFundCardSubmit} // Trigger the funding submission
+								disabled={
+									loading ||
+									!selectedCard ||
+									!phone ||
+									phone?.length < 9 ||
+									!amountFcfa ||
+									parseFloat(amountFcfa) < 100
+								}
+							>
+								{loading ? (
+									<ActivityIndicator size="small" color="#FFFFFF" /> // Show spinner if loading
+								) : (
+									<Text style={[styles.buttonText, styles.accentButtonText]}>
+										{loading ? "Funding Card..." : "Fund Card Now"}
+									</Text>
+								)}
+							</TouchableOpacity>
+						</ScrollView>
+					) : (
+						<View>
+							<Text style={{ textAlign: "center" }}>
+								Your account has not yet been verified. Submit your KYC
+								verification to add funds.
 							</Text>
-						)}
-					</TouchableOpacity>
-				</ScrollView>
+							<Text style={{ textAlign: "center", marginBlockStart: 10 }}>
+								Click{" "}
+								<Link
+									onPress={onClose}
+									href="/(app)/kyc-verification"
+									style={{
+										color: "#580097",
+										textDecorationLine: "underline",
+										fontWeight: 900,
+									}}
+								>
+									here
+								</Link>{" "}
+								to verify
+							</Text>
+						</View>
+					)}
+				</View>
 			</View>
 		</Modal>
 	);

@@ -1,10 +1,10 @@
 import { Config } from "@/constants/Config";
 import { AuthContext } from "@/contexts/AuthContext";
-import axios, { toFormData } from "axios";
+import axios from "axios";
 import { CameraType } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
 	Alert,
 	Image,
@@ -37,7 +37,7 @@ interface Form {
 }
 
 const KYCVerification = () => {
-	const { token } = useContext(AuthContext);
+	const { token, getUser } = useContext(AuthContext);
 	const [faceCaptured, setFaceCaptured] = useState(false);
 	const [form, setForm] = useState<Form>({
 		id: { front: null, back: null },
@@ -137,7 +137,10 @@ const KYCVerification = () => {
 						"✅ Submitted!",
 						"Your documents are under review and may take up to 3 days for validation. We'll notify you once complete.",
 					);
-					// router.navigate("/(tabs)");
+
+					getUser().then(() => {
+						router.navigate("/(tabs)");
+					});
 				})
 				.catch(() => {
 					Alert.alert("❌ Error", "Failed uploading data with server");
@@ -152,13 +155,11 @@ const KYCVerification = () => {
 
 	return (
 		<View style={styles.container}>
-			{/* <CameraView active={cameraStatus} style={{ height: 400 }} /> */}
-			<ScrollView>
-				<Text style={styles.description}>
-					Please complete the following steps to verify your identity. This
-					process ensures the security of your account.
-				</Text>
-
+			<Text style={styles.description}>
+				Please complete the following steps to verify your identity. This
+				process ensures the security of your account.
+			</Text>
+			<ScrollView style={{ paddingBlockStart: 5 }}>
 				{/* Step 1: ID Verification */}
 				<View style={styles.section}>
 					<Text style={styles.stepTitle}>Step 1: ID Verification</Text>

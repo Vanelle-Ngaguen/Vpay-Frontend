@@ -1,21 +1,25 @@
 import { Config } from "@/constants/Config";
-import AuthContextProvider, { AuthContext } from "@/contexts/AuthContext";
+import { AuthContext } from "@/contexts/AuthContext";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import { User } from "@/types";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { router, Stack } from "expo-router";
-import { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { useContext, useEffect } from "react";
 
 const AuthLayout = () => {
 	const { token, setToken, setUser } = useContext(AuthContext);
-	const [loading, setLoading] = useState(true);
+	const { setLoading } = useContext(LoadingContext);
 
 	useEffect(() => {
-		// console.log(token);
-		if (token) {
+		// setLoading(true);
+		if (!!token) {
+			console.log("this is my token");
 			axios
-				.get<User>(`${Config.url.api}/user`)
+				.get<User>(`${Config.url.api}/user`, {
+					headers: { Authorization: "Bearer " + token },
+				})
 				.then((response) => {
+					setUser(response.data);
 					router.navigate("/(tabs)");
 				})
 				.catch(() => {
@@ -23,6 +27,7 @@ const AuthLayout = () => {
 					setToken();
 					setUser();
 				});
+			// .finally(() => setLoading(false));
 		}
 	}, []);
 
